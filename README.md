@@ -13,4 +13,8 @@ Link to Data: https://www.kaggle.com/volodymyrgavrysh/bank-marketing-campaigns-d
 
 Link to Colab: https://colab.research.google.com/drive/1w_ZimiRTwBbyKTT-A-1-3khj7voAPn3m?usp=sharing
 
+Link to IML Book: https://christophm.github.io/interpretable-ml-book/
+
 MICE Workshop: https://github.com/kshedden/mice_workshop/blob/master/notebooks/nhanes_imputation.ipynb
+
+Lift Analysis: https://www.kdnuggets.com/2016/03/lift-analysis-data-scientist-secret-weapon.html
