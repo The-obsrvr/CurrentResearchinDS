@@ -1,0 +1,7 @@
+{
+  "C": 61,
+  "degree": 2,
+  "kernel": "rbf",
+  "max_iter": 4454,
+  "model_name": "SVR"
+}

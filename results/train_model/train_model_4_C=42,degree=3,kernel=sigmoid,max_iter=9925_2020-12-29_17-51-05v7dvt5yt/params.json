@@ -1,0 +1,7 @@
+{
+  "C": 42,
+  "degree": 3,
+  "kernel": "sigmoid",
+  "max_iter": 9925,
+  "model_name": "SVR"
+}

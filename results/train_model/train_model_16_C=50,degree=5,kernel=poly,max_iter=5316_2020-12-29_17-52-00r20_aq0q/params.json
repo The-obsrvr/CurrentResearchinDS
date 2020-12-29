@@ -1,0 +1,7 @@
+{
+  "C": 50,
+  "degree": 5,
+  "kernel": "poly",
+  "max_iter": 5316,
+  "model_name": "SVR"
+}
