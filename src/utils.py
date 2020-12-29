@@ -1,12 +1,30 @@
 from ray import tune
 import numpy as np
+import pandas as pd
 from numpy.random import randint
 
-def load_data(split: str = "Train"):
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+
+def load_data(path):
     """
     :type split: str ["train", "test"]
+    Return:
+        trainset, testset
     """
-    pass
+    bank_model_data = pd.read_csv(path, sep=",", index_col=0)
+    X = bank_model_data.drop(columns=["y_yes"])
+    y = bank_model_data["y_yes"]
+    num_features = ["age", "campaign", "previous", "emp.var.rate", "cons.price.idx", 
+                    "cons.conf.idx", "euribor3m", "nr.employed"]
+    scaler = StandardScaler(with_mean=True,with_std=True)
+    x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, 
+                                                    random_state=42, stratify= y)
+    scaler.fit(x_train[num_features])
+    x_train[num_features] = scaler.transform(x_train[num_features])
+    x_test[num_features] = scaler.transform(x_test[num_features])
+    
+    return x_train, x_test, y_train, y_test 
 
 """
 Provides functionality to fastly include big arrays for choice into HPO with ray.tune.
