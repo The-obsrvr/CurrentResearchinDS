@@ -183,7 +183,7 @@ def hpo_model(model_name: str, num_samples: int) -> dict:
                                 mode="max", ),
         loggers=DEFAULT_LOGGERS,
         resources_per_trial={
-            "cpu": 2,
+            "cpu": 5,
             "gpu": 0
         },
         config=search_space,
@@ -207,7 +207,7 @@ def train_baseline():
 def hpo_all_models() -> None:
     with open(result_dir+'test_performance.csv', 'a+', newline='') as file:
         writer = csv.writer(file)  
-        for model_name in ["SVR", "LGBM", "RandomForest", "AdaBoost", "MLP"]: 
+        for model_name in [ "MLP"]: #"SVR", "LGBM", "RandomForest", "AdaBoost",
             print("HPO for ", model_name)
             try:
                 num_samples = 100 if model_name == "MLP" else 200
@@ -219,6 +219,6 @@ def hpo_all_models() -> None:
     
 
 if __name__ == "__main__":
-    train_baseline()
+#     train_baseline()
     hpo_all_models()
 

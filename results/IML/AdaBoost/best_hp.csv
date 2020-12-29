@@ -1,0 +1,5 @@
+algorithm,SAMME.R
+base_estimator,None
+learning_rate,0.9068056267196198
+n_estimators,419
+random_state,None
