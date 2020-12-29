@@ -1,7 +1,0 @@
-{
-  "C": 64,
-  "degree": 3,
-  "kernel": "poly",
-  "max_iter": 7853,
-  "model_name": "SVR"
-}

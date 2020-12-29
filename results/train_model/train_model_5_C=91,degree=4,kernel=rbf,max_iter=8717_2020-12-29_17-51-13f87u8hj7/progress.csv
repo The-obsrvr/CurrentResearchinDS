@@ -1,2 +1,0 @@
-macro_f1_test,time_this_iter_s,done,timesteps_total,episodes_total,training_iteration,experiment_id,date,timestamp,time_total_s,pid,hostname,node_ip,time_since_restore,timesteps_since_restore,iterations_since_restore,trial_id,experiment_tag
-0.6982703520554098,29.56442904472351,False,,,1,139dd51598264bacb59d8a0b0aff7d7e,2020-12-29_17-51-44,1609260704,29.56442904472351,9772,vm-modeling-of-earths-radiation-environment,192.168.0.49,29.56442904472351,0,1,fce69_00005,"5_C=91,degree=4,kernel=rbf,max_iter=8717"
