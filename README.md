@@ -7,6 +7,10 @@ Link to Introduction Presentation with Christoph: https://docs.google.com/presen
 
 Link to Planning: https://drive.google.com/file/d/1HBN5kGhNIbb1xnKgURzGk6mckwN8jFrk/view?usp=sharing
 
+Link to Scope Resolutaion Report: https://www.overleaf.com/read/skwhmxfwxkpr
+
+Link to Final Report: 
+
 **Links related to Project:**
 
 Link to Data: https://www.kaggle.com/volodymyrgavrysh/bank-marketing-campaigns-dataset
