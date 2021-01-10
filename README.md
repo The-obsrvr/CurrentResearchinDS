@@ -21,6 +21,8 @@ References:
 
 - Lift Analysis: https://www.kdnuggets.com/2016/03/lift-analysis-data-scientist-secret-weapon.html
 
+- SHAP: https://github.com/slundberg/shap
+
 Data: 
 
 - Link to Data: https://www.kaggle.com/volodymyrgavrysh/bank-marketing-campaigns-dataset
