@@ -16,7 +16,7 @@ from sklearn.model_selection import train_test_split
 from utils import load_data, loguniform_int, sample_array, save_dictionary, save, evaluate_model
 import csv
 
-EXPERIMENT_NAME = "IML"
+EXPERIMENT_NAME = "retrain_best_svm_with_prob"
 result_dir = '../results/'
 
 x_train, x_test, y_train, y_test  = load_data()
@@ -37,7 +37,8 @@ def init_model(config: dict = None):
         model = svm.SVC(kernel=config['kernel'],
                               C=config['C'],
                               degree=config['degree'],
-                              max_iter=config['max_iter'])
+                              max_iter=config['max_iter'],
+                              probability=config['probability'])
 
     elif model_name == "LGBM":
         model = lgbm.LGBMClassifier(n_jobs=config['n_jobs'],
@@ -217,8 +218,32 @@ def hpo_all_models() -> None:
             except Exception as e:
                 print("Error", e)
     
+def retrain_best_svm_with_prob() -> None:
+#     best_hp = pd.read_csv('../results/IML/SVR/best_hp.csv', header=None)
+#     best_hp = best_hp.set_index(0).T.to_dict('records')[0]
+#     best_hp['probability'] = True
+#     best_hp['model_name'] = 'SVR'
+    best_hp = { 'model_name' : 'SVR',
+                'C': 2,
+                'break_ties': 'False',
+                'cache_size': 200,
+                'class_weight': 'None',
+                'coef0': 0.0,
+                'decision_function_shape': 'ovr',
+                'degree': 6,
+                'gamma': 'scale',
+                'kernel': 'rbf',
+                'max_iter': 4623,
+                'probability': True,
+                'random_state': 'None',
+                'shrinking': 'True',
+                'tol': 0.001,
+                'verbose': 'False'}
+    macro_f1_test = retrain_best_model(best_hp)
+    print(f'macro_f1_test:{macro_f1_test}')
 
 if __name__ == "__main__":
 #     train_baseline()
-    hpo_all_models()
+#     hpo_all_models()
+    retrain_best_svm_with_prob()
 
