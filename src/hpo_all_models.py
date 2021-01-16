@@ -13,13 +13,15 @@ from sklearn.linear_model import LogisticRegression
 import lightgbm as lgbm
 import math
 from sklearn.model_selection import train_test_split
-from utils import load_data, loguniform_int, sample_array, save_dictionary, save, evaluate_model
+from utils import load_data, loguniform_int, sample_array, save_dictionary, save, evaluate_model, DataGenerator
 import csv
 
-EXPERIMENT_NAME = "retrain_best_svm_with_prob"
+# EXPERIMENT_NAME = "retrain_best_svm_with_prob"
+EXPERIMENT_NAME = "retrain_best_lgbm_with_binary_cat"
 result_dir = '../results/'
 
-x_train, x_test, y_train, y_test  = load_data()
+dataGenerator = DataGenerator('../data/imputed_bank_data_mice.csv', True, False)
+x_train, x_test, y_train, y_test  = dataGenerator.load_data()
 x_train_hpo, x_val_hpo, y_train_hpo, y_val_hpo = train_test_split(x_train, y_train,
                                                                   test_size=0.2, shuffle=False)
 
@@ -241,9 +243,36 @@ def retrain_best_svm_with_prob() -> None:
                 'verbose': 'False'}
     macro_f1_test = retrain_best_model(best_hp)
     print(f'macro_f1_test:{macro_f1_test}')
+    
+    
+def retrain_best_lgbm_with_binary_cat() -> None:
+    best_hp = { 'model_name' : 'LGBM',
+                'boosting_type': 'gbdt',
+                 'class_weight': None,
+                 'colsample_bytree': 1.0,
+                 'importance_type': 'split',
+                 'learning_rate': 0.08978117806420283,
+                 'max_depth': -1,
+                 'min_child_samples': 20,
+                 'min_child_weight': 0.001,
+                 'min_split_gain': 0.0,
+                 'n_estimators': 76,
+                 'n_jobs': -1,
+                 'num_leaves': 57,
+                 'objective': None,
+                 'random_state': None,
+                 'reg_alpha': 0.0,
+                 'reg_lambda': 0.0,
+                 'silent': True,
+                 'subsample': 1.0,
+                 'subsample_for_bin': 272866,
+                 'subsample_freq': 0}
+    macro_f1_test = retrain_best_model(best_hp)
+    print(f'macro_f1_test:{macro_f1_test}')
 
 if __name__ == "__main__":
 #     train_baseline()
 #     hpo_all_models()
-    retrain_best_svm_with_prob()
+#     retrain_best_svm_with_prob()
+    retrain_best_lgbm_with_binary_cat()
 
