@@ -1,2 +1,3 @@
+.ipynb_checkpoints
 results/Methods/LGBM/shap_interaction_values.pkl
 results/retrain_best_lgbm_with_binary_cat/LGBM/shap_interaction_values.pkl
