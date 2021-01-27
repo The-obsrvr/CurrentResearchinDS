@@ -1,3 +1,15 @@
-.ipynb_checkpoints
+# Ignore these files and folders
 results/Methods/LGBM/shap_interaction_values.pkl
 results/retrain_best_lgbm_with_binary_cat/LGBM/shap_interaction_values.pkl
+
+# Ignore hidden files and folders
+.*
+
+# and Python cache
+__pycache__
+
+## except for certain file types
+!.gitignore
+!.gitkeep
+!*.yml
+
