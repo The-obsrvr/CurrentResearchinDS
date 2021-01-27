@@ -16,8 +16,7 @@ from sklearn.model_selection import train_test_split
 from utils import load_data, loguniform_int, sample_array, save_dictionary, save, evaluate_model, DataGenerator
 import csv
 
-# EXPERIMENT_NAME = "retrain_best_svm_with_prob"
-EXPERIMENT_NAME = "retrain_best_lgbm_with_binary_cat"
+EXPERIMENT_NAME = "Models"
 result_dir = '../results/'
 
 dataGenerator = DataGenerator('../data/imputed_bank_data_mice.csv', True, False)
@@ -27,6 +26,9 @@ x_train_hpo, x_val_hpo, y_train_hpo, y_val_hpo = train_test_split(x_train, y_tra
 
 
 def init_model(config: dict = None):
+    '''
+        Init Model based on configuration.
+    '''
     model_name = config['model_name']
 
     if model_name == "DecitionTree":
@@ -75,6 +77,9 @@ def init_model(config: dict = None):
 
 
 def retrain_best_model(config: dict) -> None:
+    '''
+        Retrain the best configuration got from HPO and save the model.
+    '''
     model_name = config['model_name']
     print("Retrain best", model_name)
 
@@ -106,6 +111,9 @@ def retrain_best_model(config: dict) -> None:
 
 
 def train_model(config: dict) -> None:
+    '''
+        Train model based on config
+    '''
     np.random.seed(0)
 
     # Init model
@@ -121,6 +129,9 @@ def train_model(config: dict) -> None:
 
 
 def hpo_model(model_name: str, num_samples: int) -> dict:
+    '''
+        Hyper parameter optimization.
+    '''
     search_space = {}
 
     if model_name == "SVR":
@@ -129,7 +140,8 @@ def hpo_model(model_name: str, num_samples: int) -> dict:
             "kernel": tune.choice(['linear', 'poly', 'rbf', 'sigmoid']),
             "C": tune.choice(np.arange(1, 100)),
             "max_iter": tune.choice(np.arange(4000, 10000)),
-            "degree": tune.choice(np.arange(2, 7))
+            "degree": tune.choice(np.arange(2, 7)),
+            'probability': True,
         }
 
     elif model_name == "LGBM":
@@ -181,7 +193,6 @@ def hpo_model(model_name: str, num_samples: int) -> dict:
         train_model,
         num_samples=num_samples,
         verbose=2,
-        #         scheduler=FIFOScheduler(),
         scheduler=ASHAScheduler(metric="macro_f1_test",
                                 mode="max", ),
         loggers=DEFAULT_LOGGERS,
@@ -190,13 +201,16 @@ def hpo_model(model_name: str, num_samples: int) -> dict:
             "gpu": 0
         },
         config=search_space,
-        local_dir=result_dir,  # TODO: add directory
+        local_dir=result_dir,
     )
 
     return analysis
 
 
 def train_baseline():
+    '''
+        Train base line models.
+    '''
     for model_name in ["DecitionTree", "LogisticRegression"]:
         print("Train baseline-", model_name)
         config = {}
@@ -208,9 +222,13 @@ def train_baseline():
 
 
 def hpo_all_models() -> None:
+    '''
+        Perform HPO for all models.
+        For each model it will try 200 different combination of Hyper-parameters.
+    '''
     with open(result_dir+'test_performance.csv', 'a+', newline='') as file:
         writer = csv.writer(file)  
-        for model_name in [ "MLP"]: #"SVR", "LGBM", "RandomForest", "AdaBoost",
+        for model_name in [ "MLP", "SVR", "LGBM", "RandomForest", "AdaBoost"]:
             print("HPO for ", model_name)
             try:
                 num_samples = 100 if model_name == "MLP" else 200
@@ -219,60 +237,8 @@ def hpo_all_models() -> None:
                 writer.writerow([model_name, macro_f1_test])
             except Exception as e:
                 print("Error", e)
-    
-def retrain_best_svm_with_prob() -> None:
-#     best_hp = pd.read_csv('../results/IML/SVR/best_hp.csv', header=None)
-#     best_hp = best_hp.set_index(0).T.to_dict('records')[0]
-#     best_hp['probability'] = True
-#     best_hp['model_name'] = 'SVR'
-    best_hp = { 'model_name' : 'SVR',
-                'C': 2,
-                'break_ties': 'False',
-                'cache_size': 200,
-                'class_weight': 'None',
-                'coef0': 0.0,
-                'decision_function_shape': 'ovr',
-                'degree': 6,
-                'gamma': 'scale',
-                'kernel': 'rbf',
-                'max_iter': 4623,
-                'probability': True,
-                'random_state': 'None',
-                'shrinking': 'True',
-                'tol': 0.001,
-                'verbose': 'False'}
-    macro_f1_test = retrain_best_model(best_hp)
-    print(f'macro_f1_test:{macro_f1_test}')
-    
-    
-def retrain_best_lgbm_with_binary_cat() -> None:
-    best_hp = { 'model_name' : 'LGBM',
-                'boosting_type': 'gbdt',
-                 'class_weight': None,
-                 'colsample_bytree': 1.0,
-                 'importance_type': 'split',
-                 'learning_rate': 0.08978117806420283,
-                 'max_depth': -1,
-                 'min_child_samples': 20,
-                 'min_child_weight': 0.001,
-                 'min_split_gain': 0.0,
-                 'n_estimators': 76,
-                 'n_jobs': -1,
-                 'num_leaves': 57,
-                 'objective': None,
-                 'random_state': None,
-                 'reg_alpha': 0.0,
-                 'reg_lambda': 0.0,
-                 'silent': True,
-                 'subsample': 1.0,
-                 'subsample_for_bin': 272866,
-                 'subsample_freq': 0}
-    macro_f1_test = retrain_best_model(best_hp)
-    print(f'macro_f1_test:{macro_f1_test}')
 
 if __name__ == "__main__":
-#     train_baseline()
-#     hpo_all_models()
-#     retrain_best_svm_with_prob()
-    retrain_best_lgbm_with_binary_cat()
+    train_baseline()
+    hpo_all_models()
 

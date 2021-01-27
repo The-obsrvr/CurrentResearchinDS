@@ -20,7 +20,8 @@ for col_name in col_names:
     col = bank_data[col_name]
     list_of_indices_not_na = []
     for i, value in enumerate(col):
-        if value != "unknown": list_of_indices_not_na.append(i)
+        if value != "unknown": 
+            list_of_indices_not_na.append(i)
 
     col.replace({"unknown": np.nan}, inplace=True)
     col_notna = col[col.notna()]
@@ -45,4 +46,4 @@ for col in col_names:
   bank_data_imp[col] = ordinal_enc_dict[col].inverse_transform(reshaped_col)
 
 
-bank_data_imp.to_csv("../data/imputed_bank_data_mice.csv")
+bank_data_imp.to_csv("imputed_bank_data_mice.csv")
