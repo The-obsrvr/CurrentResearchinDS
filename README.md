@@ -35,18 +35,7 @@ Notebooks:
 - Link to Sid's IML Hyp 2,3 & 4: https://colab.research.google.com/drive/1N18Sxavt94J--eyYnPI8zERZwKNHXfh3?usp=sharing
 
 
-**Envronment**
-numpy=1.19.5=pypi_0
-pandas=1.0.3=pypi_0
-fancyimpute=0.5.5=pypi_0 
-alibi=0.5.5=pypi_0
-sklearn=0.0=pypi_0
-scikit-image=0.18.1=pypi_0
-scikit-learn=0.23.1=pypi_0
-scikit-plot=0.3.7=pypi_0
-ray=0.8.6=pypi_0
-joblib=0.15.1=pypi_0
-lightgbm=2.3.1=pypi_0
-matplotlib=3.2.1=pypi_0
-tensorflow=2.4.0=pypi_0
-seaborn=0.10.1=pypi_0
+**Create Python Environment**
+conda create -n iml_env python=3.8.5
+conda activate iml_env
+pip install -r requirements.txt
