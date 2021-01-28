@@ -1,5 +1,5 @@
 # Ignore these files and folders
-results/Models/LGBM/shap_interaction_values.pkl
+results/retrain_best_lgbm_with_binary_cat/LGBM/shap_interaction_values.pkl
 results/train_model
 # Ignore hidden files and folders
 .*
