@@ -2,6 +2,8 @@ from ray import tune
 import numpy as np
 import pandas as pd
 from numpy.random import randint
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import f1_score
 
 """
@@ -40,6 +42,27 @@ def sample_array(lower_bound: int, upper_bound: int, length: int,
 
 def evaluate_model(y_true, y_pred):
     return f1_score(y_true, y_pred, average='macro')
+
+
+def load_data(path:str = '../data/bank_one_hot.csv'):
+    """
+    :type split: str ["train", "test"]
+    Return:
+        trainset, testset
+    """
+    bank_model_data = pd.read_csv(path, sep=",", index_col=0)
+    X = bank_model_data.drop(columns=["y_yes"])
+    y = bank_model_data["y_yes"]
+    num_features = ["age", "campaign", "previous", "emp.var.rate", "cons.price.idx", 
+                    "cons.conf.idx", "euribor3m", "nr.employed"]
+    scaler = StandardScaler(with_mean=True,with_std=True)
+    x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, 
+                                                    random_state=42, stratify= y)
+    scaler.fit(x_train[num_features])
+    x_train[num_features] = scaler.transform(x_train[num_features])
+    x_test[num_features] = scaler.transform(x_test[num_features])
+    
+    return x_train, x_test, y_train, y_test 
 
 
 def lift_analysis(model, x_test, y_test, lgbm, numOfBins=10):

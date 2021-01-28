@@ -46,4 +46,4 @@ for col in col_names:
   bank_data_imp[col] = ordinal_enc_dict[col].inverse_transform(reshaped_col)
 
 
-bank_data_imp.to_csv("imputed_bank_data_mice.csv")
+bank_data_imp.to_csv("../data/imputed_bank_data_mice.csv")

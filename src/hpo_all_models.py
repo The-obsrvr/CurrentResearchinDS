@@ -19,10 +19,8 @@ import csv
 EXPERIMENT_NAME = "Models"
 result_dir = '../results/'
 
-dataGenerator = DataGenerator('../data/imputed_bank_data_mice.csv', True, False)
-x_train, x_test, y_train, y_test  = dataGenerator.load_data()
-x_train_hpo, x_val_hpo, y_train_hpo, y_val_hpo = train_test_split(x_train, y_train,
-                                                                  test_size=0.2, shuffle=False)
+x_train, x_test, y_train, y_test  = load_data()
+x_train_hpo, x_val_hpo, y_train_hpo, y_val_hpo = train_test_split(x_train, y_train,test_size=0.2, shuffle=False)
 
 
 def init_model(config: dict = None):
@@ -76,12 +74,16 @@ def init_model(config: dict = None):
     return model
 
 
-def retrain_best_model(config: dict) -> None:
+def retrain_best_model(config: dict, exp) -> None:
     '''
         Retrain the best configuration got from HPO and save the model.
     '''
     model_name = config['model_name']
     print("Retrain best", model_name)
+    
+    if model_name == 'LGBM' and exp == 'retrain_best_lgbm_with_binary_cat':
+        dataGenerator = DataGenerator('../data/imputed_bank_data_mice.csv', True, False)
+        x_train, x_test, y_train, y_test  = dataGenerator.load_data()
 
     if model_name == "MLP":
         config["early_stopping"] = True
@@ -97,7 +99,7 @@ def retrain_best_model(config: dict) -> None:
     y_predict_test = model.predict(x_test)
     macro_f1_test = evaluate_model(y_test.to_numpy(), y_predict_test)
     
-    model_path = result_dir + EXPERIMENT_NAME + "/" + model_name + "/"
+    model_path = result_dir + exp + "/" + model_name + "/"
     if not os.path.exists(model_path):
         os.makedirs(model_path)
     # Save models to file
@@ -216,7 +218,7 @@ def train_baseline():
         config = {}
         config['model_name'] = model_name
         try:
-            retrain_best_model(config)
+            retrain_best_model(config, EXPERIMENT_NAME)
         except Exception as e:
             print("Error", e)
 
@@ -233,12 +235,38 @@ def hpo_all_models() -> None:
             try:
                 num_samples = 100 if model_name == "MLP" else 200
                 analysis = hpo_model(model_name, num_samples)
-                macro_f1_test = retrain_best_model(analysis.get_best_config(metric="macro_f1_test"))
+                macro_f1_test = retrain_best_model(analysis.get_best_config(metric="macro_f1_test"), EXPERIMENT_NAME)
                 writer.writerow([model_name, macro_f1_test])
             except Exception as e:
                 print("Error", e)
 
+def retrain_best_lgbm_with_binary_cat() -> None:
+    best_hp = { 'model_name' : 'LGBM',
+                'boosting_type': 'gbdt',
+                 'class_weight': None,
+                 'colsample_bytree': 1.0,
+                 'importance_type': 'split',
+                 'learning_rate': 0.08978117806420283,
+                 'max_depth': -1,
+                 'min_child_samples': 20,
+                 'min_child_weight': 0.001,
+                 'min_split_gain': 0.0,
+                 'n_estimators': 76,
+                 'n_jobs': -1,
+                 'num_leaves': 57,
+                 'objective': None,
+                 'random_state': None,
+                 'reg_alpha': 0.0,
+                 'reg_lambda': 0.0,
+                 'silent': True,
+                 'subsample': 1.0,
+                 'subsample_for_bin': 272866,
+                 'subsample_freq': 0}
+    macro_f1_test = retrain_best_model(best_hp, 'retrain_best_lgbm_with_binary_cat')
+    print(f'macro_f1_test:{macro_f1_test}')
+                
+        
 if __name__ == "__main__":
     train_baseline()
     hpo_all_models()
-
+    retrain_best_lgbm_with_binary_cat()

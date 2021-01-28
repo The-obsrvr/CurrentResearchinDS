@@ -1,18 +1,19 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
 # platform: linux-64
-numpy=1.19.5=pypi_0
-pandas=1.0.3=pypi_0
-fancyimpute=0.5.5=pypi_0 
-alibi=0.5.5=pypi_0
-sklearn=0.0=pypi_0
-scikit-image=0.18.1=pypi_0
-scikit-learn=0.23.1=pypi_0
-scikit-plot=0.3.7=pypi_0
-ray=0.8.6=pypi_0
-joblib=0.15.1=pypi_0
-lightgbm=2.3.1=pypi_0
-matplotlib=3.2.1=pypi_0
-tensorflow=2.4.0=pypi_0
-seaborn=0.10.1=pypi_0
-shap=0.37.0=pypi_0
+numpy==1.19.5
+pandas==1.0.3
+fancyimpute==0.5.5 
+alibi==0.5.5
+scikit-image==0.18.1
+scikit-learn==0.23.1
+scikit-plot==0.3.7
+joblib==0.15.1
+lightgbm==2.3.1
+matplotlib==3.2.1
+tensorflow==2.4.0
+seaborn==0.10.1
+shap==0.37.0
+jupyter==1.0.0 
+ray==0.8.6
+tabulate==0.8.7 
