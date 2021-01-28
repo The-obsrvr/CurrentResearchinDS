@@ -36,6 +36,6 @@ Notebooks:
 
 
 **Create Python Environment**
-conda create -n iml_env python=3.8.5
-conda activate iml_env
-pip install -r requirements.txt
+  - conda create -n iml_env python=3.8.5
+  - conda activate iml_env
+  - pip install -r requirements.txt
