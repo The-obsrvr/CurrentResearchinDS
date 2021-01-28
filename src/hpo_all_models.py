@@ -13,10 +13,10 @@ from sklearn.linear_model import LogisticRegression
 import lightgbm as lgbm
 import math
 from sklearn.model_selection import train_test_split
-from utils import load_data, loguniform_int, sample_array, save_dictionary, save, evaluate_model, DataGenerator
+from utils import load_data, loguniform_int, sample_array, evaluate_model
+from data_generator import DataGenerator
 import csv
 
-EXPERIMENT_NAME = "Models"
 result_dir = '../results/'
 
 x_train, x_test, y_train, y_test  = load_data()
@@ -80,10 +80,6 @@ def retrain_best_model(config: dict, exp) -> None:
     '''
     model_name = config['model_name']
     print("Retrain best", model_name)
-    
-    if model_name == 'LGBM' and exp == 'retrain_best_lgbm_with_binary_cat':
-        dataGenerator = DataGenerator('../data/imputed_bank_data_mice.csv', True, False)
-        x_train, x_test, y_train, y_test  = dataGenerator.load_data()
 
     if model_name == "MLP":
         config["early_stopping"] = True
@@ -98,6 +94,43 @@ def retrain_best_model(config: dict, exp) -> None:
 
     y_predict_test = model.predict(x_test)
     macro_f1_test = evaluate_model(y_test.to_numpy(), y_predict_test)
+    
+    model_path = result_dir + exp + "/" + model_name + "/"
+    if not os.path.exists(model_path):
+        os.makedirs(model_path)
+    # Save models to file
+    joblib.dump(model, model_path+'model.pkl')
+
+    with open(result_dir + model_path + 'best_hp.csv','w') as f:
+        for key in params.keys():
+            f.write("%s,%s\n" % (key, params[key]))
+            
+    return macro_f1_test
+
+
+def retrain_best_model_2(config: dict, exp) -> None:
+    '''
+        Retrain the best configuration got from HPO and save the model.
+    '''
+    model_name = config['model_name']
+    print("Retrain best", model_name)
+    
+    dataGenerator = DataGenerator('../data/imputed_bank_data_mice.csv', True, False)
+    x_train_2, x_test_2, y_train_2, y_test_2  = dataGenerator.load_data()
+
+    if model_name == "MLP":
+        config["early_stopping"] = True
+        config["validation_fraction"] = 0.2
+        config['max_iter'] = 1000
+
+    model = init_model(config)
+    model.fit(x_train_2, y_train_2)
+
+    # Logging params
+    params = model.get_params()
+
+    y_predict_test = model.predict(x_test_2)
+    macro_f1_test = evaluate_model(y_test_2.to_numpy(), y_predict_test)
     
     model_path = result_dir + exp + "/" + model_name + "/"
     if not os.path.exists(model_path):
@@ -218,7 +251,7 @@ def train_baseline():
         config = {}
         config['model_name'] = model_name
         try:
-            retrain_best_model(config, EXPERIMENT_NAME)
+            retrain_best_model(config, "Models")
         except Exception as e:
             print("Error", e)
 
@@ -235,7 +268,7 @@ def hpo_all_models() -> None:
             try:
                 num_samples = 100 if model_name == "MLP" else 200
                 analysis = hpo_model(model_name, num_samples)
-                macro_f1_test = retrain_best_model(analysis.get_best_config(metric="macro_f1_test"), EXPERIMENT_NAME)
+                macro_f1_test = retrain_best_model(analysis.get_best_config(metric="macro_f1_test"), "Models")
                 writer.writerow([model_name, macro_f1_test])
             except Exception as e:
                 print("Error", e)
@@ -262,7 +295,7 @@ def retrain_best_lgbm_with_binary_cat() -> None:
                  'subsample': 1.0,
                  'subsample_for_bin': 272866,
                  'subsample_freq': 0}
-    macro_f1_test = retrain_best_model(best_hp, 'retrain_best_lgbm_with_binary_cat')
+    macro_f1_test = retrain_best_model_2(best_hp, 'retrain_best_lgbm_with_binary_cat')
     print(f'macro_f1_test:{macro_f1_test}')
                 
         
