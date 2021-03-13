@@ -18,7 +18,7 @@ from data_generator import DataGenerator
 import csv
 
 result_dir = '../results/'
-dataGeneratorinit = DataGenerator('../data/imputed_bank_data_mice.csv', True, False)
+dataGeneratorinit = DataGenerator('../data/imputed_bank_data_mice.csv', imputed=True, preprocessed=False)
 x_train, x_test, y_train, y_test  = dataGeneratorinit.load_data()
 x_train_hpo, x_val_hpo, y_train_hpo, y_val_hpo = train_test_split(x_train, y_train,test_size=0.2, shuffle=False)
 
@@ -28,7 +28,7 @@ def init_model(config: dict = None):
     '''
     model_name = config['model_name']
 
-    if model_name == "DecitionTree":
+    if model_name == "DecisionTree":
         model = tree.DecisionTreeClassifier()
 
     elif model_name == "LogisticRegression":
@@ -245,7 +245,7 @@ def train_baseline():
     '''
         Train base line models.
     '''
-    for model_name in ["DecitionTree", "LogisticRegression"]:
+    for model_name in ["DecisionTree", "LogisticRegression"]:
         print("Train baseline-", model_name)
         config = {}
         config['model_name'] = model_name
