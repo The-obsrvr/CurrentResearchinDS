@@ -43,6 +43,4 @@ Notebooks:
 
 **How to run the project: **
   - run src/imputation.py
-  - run src/one_hot_enc.py (SID)
   - run src/hpo_all_models.py
-  - run the notebooks (SID - preprocessing)
