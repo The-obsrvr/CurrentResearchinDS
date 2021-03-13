@@ -18,10 +18,9 @@ from data_generator import DataGenerator
 import csv
 
 result_dir = '../results/'
-
-x_train, x_test, y_train, y_test  = load_data()
+dataGeneratorinit = DataGenerator('../data/imputed_bank_data_mice.csv', True, False)
+x_train, x_test, y_train, y_test  = dataGeneratorinit.load_data()
 x_train_hpo, x_val_hpo, y_train_hpo, y_val_hpo = train_test_split(x_train, y_train,test_size=0.2, shuffle=False)
-
 
 def init_model(config: dict = None):
     '''
