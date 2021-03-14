@@ -3,12 +3,10 @@ Working Repository for our project in Current Research in Data Science.
 
 Team: Siddharth Bhargava & Tanveer Hannan
 
-(Final Documentation: https://www.overleaf.com/read/yspmvgqgxbsx)
+Final Documentation: https://www.overleaf.com/read/yspmvgqgxbsx
 
 
-Data: 
-
-- Link to Data: https://www.kaggle.com/volodymyrgavrysh/bank-marketing-campaigns-dataset
+Data: https://www.kaggle.com/volodymyrgavrysh/bank-marketing-campaigns-dataset
 
 
 ## Setting Up the Environment
@@ -39,10 +37,10 @@ Run the following command to train and tune our models. The different hyperparam
 ```
 run src/hpo_all_models.py
 ```
-For data, we load our imputed data file (data/imputed_bank_data_mice.csv) into DataGenerator module, called in the script.
+For data, we load our imputed data file (data/imputed_bank_data_mice.csv) into DataGenerator module, called in the script. Our evaluations can be seen in the Notebook "evaluate_models.ipynb" (Notebooks/evaluate_models.ipynb)
 
 ### Step 3: Interpretable Machine Learning
 
 We defined our counterfactual module in the counterfactuals.py script. 
 
-  - run all the notebooks
+For our analysis based on shapley values, please refer to our Notebook "SHAP.ipynb" and for our analysis using Counterfactuals, please refer to our notebook "counterfactuals.ipynb".
