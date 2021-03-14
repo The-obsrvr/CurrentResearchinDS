@@ -1,47 +1,48 @@
 # Current Research in Data Science
 Working Repository for our project in Current Research in Data Science.
 
-**Documentation:**
+Team: Siddharth Bhargava & Tanveer Hannan
 
-Link to Introduction Presentation with Christoph: https://docs.google.com/presentation/d/1lv9z4OcPjj05oE3KBqbrjb48-X0PV18dU-W6wjIv9S4/edit?usp=sharing
+(Final Documentation: https://www.overleaf.com/read/yspmvgqgxbsx)
 
-Link to Planning: https://drive.google.com/file/d/1HBN5kGhNIbb1xnKgURzGk6mckwN8jFrk/view?usp=sharing
-
-Link to Scope Resolution Report: https://www.overleaf.com/read/skwhmxfwxkpr
-
-Link to Final Report: 
-
-**Links related to Project:**
-
-References:
-
-- Link to IML Book: https://christophm.github.io/interpretable-ml-book/
-
-- MICE Workshop: https://github.com/kshedden/mice_workshop/blob/master/notebooks/nhanes_imputation.ipynb
-
-- Lift Analysis: https://www.kdnuggets.com/2016/03/lift-analysis-data-scientist-secret-weapon.html
-
-- SHAP: https://github.com/slundberg/shap
 
 Data: 
 
 - Link to Data: https://www.kaggle.com/volodymyrgavrysh/bank-marketing-campaigns-dataset
 
 
-Notebooks:
-
-- Link to Pre-processing Colab Notebook: https://colab.research.google.com/drive/1w_ZimiRTwBbyKTT-A-1-3khj7voAPn3m?usp=sharing
-
-- Link to Sid's IML Hyp 2,3 & 4: https://colab.research.google.com/drive/1N18Sxavt94J--eyYnPI8zERZwKNHXfh3?usp=sharing
-
+## Setting Up the Environment
 
 **Create Python Environment**
-  - conda create -n iml_env python=3.8.5
-  - conda activate iml_env
-  - pip install -r requirements.txt
-  - pip install 'ray[tune]'
 
-**How to run the project: **
-  - run src/imputation.py
-  - run src/hpo_all_models.py
+Run the following command in the terminal.
+```
+  conda create -n iml_env python=3.8.5
+  conda activate iml_env
+  pip install -r requirements.txt
+  pip install 'ray[tune]'
+```
+
+## Running our Code
+
+### Step 1: Preprocessing
+
+Run the following command to created the imputed data. The path to the original data file and the type of imputer has been defined inside the script.
+```
+run src/imputation.py
+```
+Our pre-processing steps have been encapsulated in our DataGenerator object defined in our data_generator.py script. For visualizations related to our exploratory data analysis, please refer to our Notebook "pre_processing.ipynb" (Notebooks/pre_processing.ipynb)
+
+### Step 2: Modeling
+
+Run the following command to train and tune our models. The different hyperparamaters for each chosen model have been defined within the script.
+```
+run src/hpo_all_models.py
+```
+For data, we load our imputed data file (data/imputed_bank_data_mice.csv) into DataGenerator module, called in the script.
+
+### Step 3: Interpretable Machine Learning
+
+We defined our counterfactual module in the counterfactuals.py script. 
+
   - run all the notebooks
