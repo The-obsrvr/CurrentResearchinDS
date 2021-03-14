@@ -44,3 +44,4 @@ Notebooks:
 **How to run the project: **
   - run src/imputation.py
   - run src/hpo_all_models.py
+  - run all the notebooks
